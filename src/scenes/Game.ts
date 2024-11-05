@@ -27,12 +27,12 @@ export class Game extends Scene
         // });
         // this.msg_text.setOrigin(0.5);
 
-        let test_task = new Task(this, 200, 250, 500, 300, "Carrot", 0, "Carrot", 10);
+        let test_task = new Task(this, 200, 250, 250, 150, "Carrot", 0, "Carrot", 10);
 
-        this.input.once('pointerdown', () => {
+        // this.input.once('pointerdown', () => {
 
-            this.scene.start('GameOver');
+        //     this.scene.start('GameOver');
 
-        });
+        // });
     }
 }
