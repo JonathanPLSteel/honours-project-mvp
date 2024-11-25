@@ -27,7 +27,9 @@ export class Game extends Scene
         // });
         // this.msg_text.setOrigin(0.5);
 
-        let test_task = new Task(this, "Carrot", 200, 250, 250, 150, 0, 10);
+        let first_task = new Task(this, "Carrot", 200, 250, 250, 150, 0, 10);
+
+        let second_task = new Task(this, "Carrot", 100, 150, 250, 150, 1, 10);
 
         // this.input.once('pointerdown', () => {
 
