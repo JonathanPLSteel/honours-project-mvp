@@ -74,13 +74,16 @@ export default class Task extends Phaser.GameObjects.Sprite {
 
         this.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
             this.setPosition(dragX, dragY);
-            this.nameText.setPosition(dragX, dragY - this.displayHeight * 0.3);
-            this.icon.setPosition(dragX, dragY)
-            this.durationText.setPosition(dragX, dragY + this.displayHeight * 0.3);
         });
 
         this.on("dragend", () => {
             this.setAlpha(1); 
         });
+    }
+
+    public update() {
+        this.nameText.setPosition(this.x, this.y - this.displayHeight * 0.3);
+        this.icon.setPosition(this.x, this.y)
+        this.durationText.setPosition(this.x, this.y + this.displayHeight * 0.3);
     }
 }
