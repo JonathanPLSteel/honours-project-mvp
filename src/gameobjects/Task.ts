@@ -76,8 +76,16 @@ export default class Task extends Phaser.GameObjects.Sprite {
             this.setPosition(dragX, dragY);
         });
 
-        this.on("dragend", () => {
+        this.on("dragend", (dropped: boolean) => {
             this.setAlpha(1); 
+            if (!dropped) {
+                console.log('Task was not dropped in a valid zone, resetting position...')
+                this.x = 512
+                this.y = 680
+            }
+            else {
+                console.log('Task should have been dropped...')
+            }
         });
     }
 
