@@ -70,14 +70,23 @@ export default class Task extends Phaser.GameObjects.Sprite {
         // Drag events
         this.on("dragstart", () => {
             this.setAlpha(0.8);
+            this.setDepth(999);
         });
 
         this.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
             this.setPosition(dragX, dragY);
         });
 
-        this.on("dragend", (dropped: boolean) => {
-            this.setAlpha(1); 
+        this.on("dragend", (pointer: Phaser.Input.Pointer, dropped: boolean) => {
+            this.setAlpha(1);
+
+            this.setDepth(2);
+
+            // Works but creates a slight bug when overlapping with other tasks.
+            this.nameText.setDepth(3);
+            this.icon.setDepth(3);
+            this.durationText.setDepth(3);
+
             if (!dropped) {
                 console.log('Task was not dropped in a valid zone, resetting position...')
                 this.x = 512
