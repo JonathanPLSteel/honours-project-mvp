@@ -7,6 +7,10 @@ export default class Machine extends Phaser.GameObjects.Container {
 
     private dropZone: Phaser.GameObjects.Zone;
 
+    private nameText!: Phaser.GameObjects.Text;
+    private totalText!: Phaser.GameObjects.Text;
+    private icon!: Phaser.GameObjects.Image;
+
     constructor(scene: Phaser.Scene, name: string, x: number, y: number, width: number, height: number, id: number, total: number) {
         super(scene, x, y);
 
@@ -23,21 +27,49 @@ export default class Machine extends Phaser.GameObjects.Container {
 
         this.dropZone = scene.add.zone(x, y, width, height).setRectangleDropZone(width, height);
 
-        if (this.dropZone.input) {
-            const graphics = scene.add.graphics();
-            graphics.lineStyle(2, 0x00ff00);
-            graphics.strokeRect(
-                this.dropZone.x - this.dropZone.input.hitArea.width / 2,
-                this.dropZone.y - this.dropZone.input.hitArea.height / 2,
-                this.dropZone.input.hitArea.width,
-                this.dropZone.input.hitArea.height
-            );
-        }
+        this.addComponents();
 
         this.addDropZoneListeners();
 
         // Add the sprite to the scene
         this.scene.add.existing(this);
+    }
+
+    private addComponents() {
+        this.nameText = this.scene.add.text(
+            0,
+            -(this.displayHeight * 0.425),
+            this.name,
+            {
+                fontFamily: 'WorkSansBold, Arial, sans-serif',
+                fontSize: "20px",
+                color: "#000000",
+            }
+        )
+        this.nameText.setOrigin(0.5,0.5);
+        this.add(this.nameText)
+
+        this.icon = this.scene.add.image(
+            0,
+            -(this.displayHeight * 0.3),
+            "chef"
+        );
+        this.icon.setDisplaySize(70, 70);
+        this.icon.setOrigin(0.5, 0.5);
+        this.add(this.icon)
+
+        this.totalText = this.scene.add.text(
+            0,
+            this.displayHeight * 0.425,
+            `${this.total} minutes`,
+            {
+                fontFamily: 'WorkSansRegular, Arial, sans-serif',
+                fontSize: "16px",
+                color: "#000000",
+            }
+        );
+        this.totalText.setOrigin(0.5, 0.5);
+        this.add(this.totalText)
     }
 
     private addDropZoneListeners() {
