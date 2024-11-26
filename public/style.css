@@ -1,3 +1,13 @@
+@font-face {
+    font-family: WorkSansRegular;
+    src: url('./assets/fonts/work_sans_regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: WorkSansBold;
+    src: url('./assets/fonts/work_sans_bold.ttf') format('truetype');
+}
+
 body {
     margin: 0;
     padding: 0;

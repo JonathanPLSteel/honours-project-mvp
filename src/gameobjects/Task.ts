@@ -37,7 +37,8 @@ export default class Task extends Phaser.GameObjects.Sprite {
             this.y - this.displayHeight * 0.3,
             this.name,
             {
-                fontSize: "24px",
+                fontFamily: 'WorkSansBold, Arial, sans-serif',
+                fontSize: "20px",
                 color: "#000000",
             }
         )
@@ -54,8 +55,9 @@ export default class Task extends Phaser.GameObjects.Sprite {
         this.durationText = this.scene.add.text(
             this.x,
             this.y + this.displayHeight * 0.3,
-            `Duration: ${this.duration}`,
+            `${this.duration} minutes`,
             {
+                fontFamily: 'WorkSansRegular, Arial, sans-serif',
                 fontSize: "16px",
                 color: "#000000",
             }
@@ -82,7 +84,7 @@ export default class Task extends Phaser.GameObjects.Sprite {
 
             this.setDepth(2);
 
-            // Works but creates a slight bug when overlapping with other tasks.
+            // FIXME: Works but creates a slight bug when overlapping with other tasks.
             this.nameText.setDepth(3);
             this.icon.setDepth(3);
             this.durationText.setDepth(3);
