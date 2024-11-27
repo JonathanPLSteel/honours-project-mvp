@@ -14,9 +14,13 @@ export default class TaskManager {
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
 
-        this.addTask(new Task(this.scene, "Carrot", 150, 650, this.task_dims.width, this.task_dims.height, 0, 10));
+        this.addTask(new Task(this.scene, "Carrot", 150, 650, this.task_dims.width, this.task_dims.height, this.tasks.length, 10, "carrot"));
 
-        this.addTask(new Task(this.scene, "Carrot", 700, 650, this.task_dims.width, this.task_dims.height, 1, 10));
+        this.addTask(new Task(this.scene, "Carrot", 800, 650, this.task_dims.width, this.task_dims.height, this.tasks.length, 10, "carrot"));
+
+        this.addTask(new Task(this.scene, "Roast Chicken", 600, 650, this.task_dims.width, this.task_dims.height, this.tasks.length, 30, "roast-chicken"));
+
+        this.addTask(new Task(this.scene, "Roast Chicken", 400, 650, this.task_dims.width, this.task_dims.height, this.tasks.length, 30, "roast-chicken"));
 
         this.addMachine(new Machine(this.scene, this, "Chef Jonathan", 250, 250, 475, 450, 0));
 

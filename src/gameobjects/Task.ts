@@ -6,15 +6,18 @@ export default class Task extends Phaser.GameObjects.Sprite {
 
     private nameText!: Phaser.GameObjects.Text;
     private durationText!: Phaser.GameObjects.Text;
+
+    private icon_key: string;
     private icon!: Phaser.GameObjects.Image;
 
-    constructor(scene: Phaser.Scene, name: string, x: number, y: number, width: number, height: number, id: number, duration: number) {
+    constructor(scene: Phaser.Scene, name: string, x: number, y: number, width: number, height: number, id: number, duration: number, icon_key: string) {   
         super(scene, x, y, 'task-bg');
 
         this.scene = scene;
         this.name = name;
         this.id = id;
         this.duration = duration;
+        this.icon_key = icon_key;
 
         // Add the sprite to the scene
         this.scene.add.existing(this);
@@ -47,7 +50,7 @@ export default class Task extends Phaser.GameObjects.Sprite {
         this.icon = this.scene.add.image(
             this.x,
             this.y,
-            "carrot"
+            this.icon_key
         );
         this.icon.setDisplaySize(40, 40);
         this.icon.setOrigin(0.5, 0.5);

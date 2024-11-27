@@ -37,6 +37,7 @@ export class Preloader extends Scene
         this.load.image('carrot', 'carrot.png');
         this.load.image('machine-bg', 'machine-bg.png')
         this.load.image('chef', 'chef.png')
+        this.load.image('roast-chicken', 'roast-chicken.png')
 
         this.add.text(0, 0, 'Loading...', { fontFamily: 'WorkSansRegular', fontSize: '1px' }).setVisible(false);
         this.add.text(0, 0, 'Loading...', { fontFamily: 'WorkSansBold', fontSize: '1px' }).setVisible(false);
