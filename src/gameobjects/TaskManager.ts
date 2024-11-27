@@ -18,9 +18,9 @@ export default class TaskManager {
 
         this.addTask(new Task(this.scene, "Carrot", 700, 650, this.task_dims.width, this.task_dims.height, 1, 10));
 
-        this.addMachine(new Machine(this.scene, "Chef Jonathan", 250, 250, 475, 450, 0, 0));
+        this.addMachine(new Machine(this.scene, this, "Chef Jonathan", 250, 250, 475, 450, 0));
 
-        this.addMachine(new Machine(this.scene, "Chef Josh", 750, 250, 475, 450, 1, 0));
+        this.addMachine(new Machine(this.scene, this, "Chef Josh", 750, 250, 475, 450, 1));
     }
 
     addTask(task: Task) {
@@ -29,6 +29,10 @@ export default class TaskManager {
 
     addMachine(machine: Machine) {
         this.machines.push(machine);
+    }
+
+    getTaskDims() {
+        return this.task_dims;
     }
 
     update() {

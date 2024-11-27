@@ -1,5 +1,9 @@
+import Task from "./Task";
+import TaskManager from "./TaskManager";
+
 export default class Machine extends Phaser.GameObjects.Container {
     scene: Phaser.Scene;
+    taskManager: TaskManager;
     name: string;
     id: number;
     total: number;
@@ -11,25 +15,62 @@ export default class Machine extends Phaser.GameObjects.Container {
     private totalText!: Phaser.GameObjects.Text;
     private icon!: Phaser.GameObjects.Image;
 
-    constructor(scene: Phaser.Scene, name: string, x: number, y: number, width: number, height: number, id: number, total: number) {
+    private tasks: Task[];
+
+    private slot_coords: { x: number; y: number }[];
+    private highlighted_slot: Phaser.GameObjects.Rectangle;
+
+    constructor(
+        scene: Phaser.Scene,
+        taskManager: TaskManager,
+        name: string,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        id: number
+    ) {
         super(scene, x, y);
 
         this.scene = scene;
+        this.taskManager = taskManager;
         this.name = name;
         this.id = id;
-        this.total = total;
+        this.total = 0;
+        this.tasks = [];
 
-        this.background = this.scene.add.sprite(0, 0, 'machine-bg');
+        this.background = this.scene.add.sprite(0, 0, "machine-bg");
         this.background.setDisplaySize(width, height);
         this.add(this.background);
 
         this.setSize(width, height);
 
-        this.dropZone = scene.add.zone(x, y, width, height).setRectangleDropZone(width, height);
+        this.dropZone = scene.add
+            .zone(x, y, width, height)
+            .setRectangleDropZone(width, height);
 
         this.addComponents();
 
         this.addDropZoneListeners();
+
+        this.slot_coords = [
+            {
+                x: this.x - this.displayWidth * 0.25,
+                y: this.y - this.displayHeight * 0.05,
+            },
+            {
+                x: this.x + this.displayWidth * 0.25,
+                y: this.y - this.displayHeight * 0.05,
+            },
+            {
+                x: this.x - this.displayWidth * 0.25,
+                y: this.y + this.displayHeight * 0.25,
+            },
+            {
+                x: this.x + this.displayWidth * 0.25,
+                y: this.y + this.displayHeight * 0.25,
+            },
+        ];
 
         // Add the sprite to the scene
         this.scene.add.existing(this);
@@ -41,13 +82,13 @@ export default class Machine extends Phaser.GameObjects.Container {
             -(this.displayHeight * 0.425),
             this.name,
             {
-                fontFamily: 'WorkSansBold, Arial, sans-serif',
+                fontFamily: "WorkSansBold, Arial, sans-serif",
                 fontSize: "20px",
                 color: "#000000",
             }
-        )
-        this.nameText.setOrigin(0.5,0.5);
-        this.add(this.nameText)
+        );
+        this.nameText.setOrigin(0.5, 0.5);
+        this.add(this.nameText);
 
         this.icon = this.scene.add.image(
             0,
@@ -56,52 +97,116 @@ export default class Machine extends Phaser.GameObjects.Container {
         );
         this.icon.setDisplaySize(70, 70);
         this.icon.setOrigin(0.5, 0.5);
-        this.add(this.icon)
+        this.add(this.icon);
 
         this.totalText = this.scene.add.text(
             0,
             this.displayHeight * 0.425,
             `${this.total} minutes`,
             {
-                fontFamily: 'WorkSansRegular, Arial, sans-serif',
+                fontFamily: "WorkSansRegular, Arial, sans-serif",
                 fontSize: "16px",
                 color: "#000000",
             }
         );
         this.totalText.setOrigin(0.5, 0.5);
-        this.add(this.totalText)
+        this.add(this.totalText);
     }
 
     private addDropZoneListeners() {
-        this.scene.input.on('dragenter', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dropZone: Phaser.GameObjects.Zone) => {
-            console.log("dragenter detected")
-            if (dropZone === this.dropZone) {
-                console.log('Task entered the drop zone!');
-                this.background.setTint(0x00ff00); // Highlight the machine
-            }
-        });
+        this.scene.input.on(
+            "dragenter",
+            (
+                pointer: Phaser.Input.Pointer,
+                gameObject: Phaser.GameObjects.Sprite,
+                dropZone: Phaser.GameObjects.Zone
+            ) => {
+                if (dropZone === this.dropZone) {
+                    if (gameObject instanceof Task) {
+                        this.removeTask(gameObject.id);
+                    }
 
-        this.scene.input.on('dragleave', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dropZone: Phaser.GameObjects.Zone) => {
-            console.log("dragleave detected")
-            if (dropZone === this.dropZone) {
-                console.log('Task left the drop zone!');
-                this.background.clearTint(); // Remove highlight
-            }
-        });
+                    this.highlightSlot(this.slot_coords[this.tasks.length]);
 
-        this.scene.input.on('drop', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dropZone: Phaser.GameObjects.Zone) => {
-            console.log("drop detected")
-            if (dropZone === this.dropZone) {
-                console.log('Task dropped into the machine!');
-                // Snap the task to the center of the machine
-                gameObject.x = this.x;
-                gameObject.y = this.y;
-                this.background.clearTint();
+                    // this.background.setTint(0x00ff00); // Highlight the machine
+                }
             }
-        });
+        );
+
+        this.scene.input.on(
+            "dragleave",
+            (
+                pointer: Phaser.Input.Pointer,
+                gameObject: Phaser.GameObjects.Sprite,
+                dropZone: Phaser.GameObjects.Zone
+            ) => {
+                if (dropZone === this.dropZone) {
+                    this.unhighlightSlot();
+                }
+            }
+        );
+
+        this.scene.input.on(
+            "drop",
+            (
+                pointer: Phaser.Input.Pointer,
+                gameObject: Phaser.GameObjects.Sprite,
+                dropZone: Phaser.GameObjects.Zone
+            ) => {
+                if (dropZone === this.dropZone) {
+                    console.log(`${gameObject.name} dropped into the machine!`);
+
+                    if (gameObject instanceof Task) {
+                        this.addTask(gameObject);
+                        this.unhighlightSlot();
+                    } else {
+                        console.error("Invalid object dropped into machine!");
+                    }
+
+                    // Snap the task to the center of the machine
+                    gameObject.x = this.slot_coords[this.tasks.length - 1].x;
+                    gameObject.y = this.slot_coords[this.tasks.length - 1].y;
+
+                    this.background.clearTint();
+                }
+            }
+        );
     }
 
-    public update() {
-
+    private addTask(task: Task) {
+        this.tasks.push(task);
+        this.total += task.duration;
+        this.updateTotalText();
     }
+
+    private removeTask(task_index: number) {
+        let index = this.tasks.findIndex((task) => task.id === task_index);
+        if (index !== -1) {
+            this.total -= this.tasks[index].duration;
+            this.updateTotalText();
+            this.tasks.splice(index, 1);
+        }
+    }
+
+    private updateTotalText() {
+        this.totalText.setText(`${this.total} minutes`);
+    }
+
+    private highlightSlot(coord: { x: number; y: number }) {
+        this.highlighted_slot = this.scene.add.rectangle(
+            coord.x,
+            coord.y,
+            this.taskManager.getTaskDims().width,
+            this.taskManager.getTaskDims().height,
+            0xe5e5e5,
+            0.5
+        );
+        this.highlighted_slot.setDepth(2);
+    }
+
+    private unhighlightSlot() {
+        this.highlighted_slot.destroy();
+    }
+
+    public update() {}
 }

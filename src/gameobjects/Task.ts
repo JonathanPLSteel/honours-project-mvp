@@ -94,9 +94,6 @@ export default class Task extends Phaser.GameObjects.Sprite {
                 this.x = 512
                 this.y = 680
             }
-            else {
-                console.log('Task should have been dropped...')
-            }
         });
     }
 

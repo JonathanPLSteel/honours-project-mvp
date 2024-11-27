@@ -1,6 +1,4 @@
 import { Scene } from 'phaser';
-import Task from '../gameobjects/Task';
-import Machine from '../gameobjects/Machine';
 import TaskManager from '../gameobjects/TaskManager';
 
 export class Game extends Scene
