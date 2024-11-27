@@ -187,9 +187,19 @@ export default class Machine extends Phaser.GameObjects.Container {
         let index = this.tasks.findIndex((task) => task.id === task_index);
         if (index !== -1) {
             this.total -= this.tasks[index].duration;
+
             this.updateTotalText();
+
             this.tasks[index].detach();
+
+            // Task Removed
             this.tasks.splice(index, 1);
+
+            // Update the positions of the remaining tasks
+            this.tasks.forEach((task, i) => {
+                task.x = this.slot_coords[i].x;
+                task.y = this.slot_coords[i].y;
+            });
         }
     }
 
