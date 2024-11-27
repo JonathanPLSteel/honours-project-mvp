@@ -16,7 +16,6 @@ export class Game extends Scene
 
     create ()
     {
-
         let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
         this.task_manager = new TaskManager(this, tasks);
     }

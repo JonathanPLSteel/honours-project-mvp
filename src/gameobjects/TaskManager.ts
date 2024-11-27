@@ -7,6 +7,7 @@ export default class TaskManager {
     private machines: Machine[] = [];
     private task_bar: TaskBar;
     private scene: Phaser.Scene;
+    private total_duration: number;
 
     private task_types: {key: string, name: string, duration: number}[] = [
         {key: "carrots", name: "Carrots", duration: 10},
@@ -19,6 +20,8 @@ export default class TaskManager {
         width: 175,
         height: 125,
     };
+
+    private total_duration_text!: Phaser.GameObjects.Text;
 
     constructor(scene: Phaser.Scene, task_keys: string[]) {
         this.scene = scene;
@@ -62,7 +65,7 @@ export default class TaskManager {
                 this.scene,
                 this,
                 "Chef Jonathan",
-                250,
+                this.scene.scale.width * 0.25,
                 250,
                 475,
                 450,
@@ -71,15 +74,28 @@ export default class TaskManager {
         );
 
         this.addMachine(
-            new Machine(this.scene, this, "Chef Josh", 750, 250, 475, 450, 1)
+            new Machine(this.scene, this, "Chef Julian", this.scene.scale.width * 0.75, 250, 475, 450, 1)
         );
+
+        this.total_duration = 0;
+
+        this.total_duration_text = this.scene.add.text(
+            this.scene.scale.width * 0.4625,
+            this.scene.scale.height - this.task_bar.displayHeight * 1.75,
+            `${this.total_duration} minutes`,
+            {
+                fontFamily: "WorkSansRegular, Arial, sans-serif",
+                fontSize: "16px",
+                color: "#000000",
+            }
+        )
     }
 
-    addTask(task: Task) {
+    private addTask(task: Task) {
         this.tasks.push(task);
     }
 
-    addMachine(machine: Machine) {
+    private addMachine(machine: Machine) {
         this.machines.push(machine);
     }
 
@@ -87,8 +103,15 @@ export default class TaskManager {
         return this.task_dims;
     }
 
+    private updateTotalDuration() {
+        this.total_duration = this.machines.reduce((acc, machine) => acc + machine.total, 0);
+        this.total_duration_text.setText(`${this.total_duration} minutes`);
+    }
+
     update() {
         this.tasks.forEach((task) => task.update());
+
         this.machines.forEach((machine) => machine.update());
+        this.updateTotalDuration();
     }
 }
