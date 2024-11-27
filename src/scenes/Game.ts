@@ -18,6 +18,13 @@ export class Game extends Scene
     {
         let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
         this.task_manager = new TaskManager(this, tasks);
+
+        this.events.on('submit', this.onSubmit, this);
+    }
+
+    onSubmit() {
+        let total_duration = this.task_manager.getTotalDuration();
+        console.log(`Total duration: ${total_duration}`);
     }
 
     update(time: number, delta: number): void {

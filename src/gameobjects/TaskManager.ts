@@ -114,10 +114,6 @@ export default class TaskManager {
         this.machines.push(machine);
     }
 
-    getTaskDims() {
-        return this.task_dims;
-    }
-
     private updateTotalDuration() {
         this.total_duration = this.machines.reduce(
             (acc, machine) => acc + machine.total,
@@ -133,18 +129,28 @@ export default class TaskManager {
     private displaySubmitButton() {
         this.submit_button = new Button(
             this.scene,
-            this.total_duration_text.x + this.total_duration_text.displayWidth * 0.5,
-            this.total_duration_text.y + this.total_duration_text.displayHeight * 2.5,
+            this.total_duration_text.x +
+                this.total_duration_text.displayWidth * 0.5,
+            this.total_duration_text.y +
+                this.total_duration_text.displayHeight * 2.5,
             0,
             "Submit",
             () => {
-                console.log("Submit button clicked");
+                this.scene.events.emit("submit");
             }
         );
     }
 
     private hideSubmitButton() {
         this.submit_button.destroy();
+    }
+
+    getTaskDims() {
+        return this.task_dims;
+    }
+
+    getTotalDuration() {
+        return this.total_duration;
     }
 
     update() {
