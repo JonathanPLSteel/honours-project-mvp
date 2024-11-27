@@ -157,7 +157,6 @@ export default class Machine extends Phaser.GameObjects.Container {
                 dropZone: Phaser.GameObjects.Zone
             ) => {
                 if (dropZone === this.dropZone && this.tasks.length < this.capacity) {
-                    console.log(`${gameObject.name} dropped into the machine!`);
 
                     if (gameObject instanceof Task) {
                         this.addTask(gameObject);

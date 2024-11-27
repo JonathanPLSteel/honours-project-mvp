@@ -13,8 +13,18 @@ export default class Task extends Phaser.GameObjects.Sprite {
     private attached: boolean;
     private original_coords: { x: number; y: number };
 
-    constructor(scene: Phaser.Scene, name: string, x: number, y: number, width: number, height: number, id: number, duration: number, icon_key: string) {   
-        super(scene, x, y, 'task-bg');
+    constructor(
+        scene: Phaser.Scene,
+        name: string,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        id: number,
+        duration: number,
+        icon_key: string
+    ) {
+        super(scene, x, y, "task-bg");
 
         this.scene = scene;
         this.name = name;
@@ -45,18 +55,14 @@ export default class Task extends Phaser.GameObjects.Sprite {
             this.y - this.displayHeight * 0.3,
             this.name,
             {
-                fontFamily: 'WorkSansBold, Arial, sans-serif',
+                fontFamily: "WorkSansBold, Arial, sans-serif",
                 fontSize: "20px",
                 color: "#000000",
             }
-        )
-        this.nameText.setOrigin(0.5,0.5);
-
-        this.icon = this.scene.add.image(
-            this.x,
-            this.y,
-            this.icon_key
         );
+        this.nameText.setOrigin(0.5, 0.5);
+
+        this.icon = this.scene.add.image(this.x, this.y, this.icon_key);
         this.icon.setDisplaySize(40, 40);
         this.icon.setOrigin(0.5, 0.5);
 
@@ -65,7 +71,7 @@ export default class Task extends Phaser.GameObjects.Sprite {
             this.y + this.displayHeight * 0.3,
             `${this.duration} minutes`,
             {
-                fontFamily: 'WorkSansRegular, Arial, sans-serif',
+                fontFamily: "WorkSansRegular, Arial, sans-serif",
                 fontSize: "16px",
                 color: "#000000",
             }
@@ -83,39 +89,47 @@ export default class Task extends Phaser.GameObjects.Sprite {
             this.setDepth(999);
         });
 
-        this.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-            this.setPosition(dragX, dragY);
-        });
-
-        this.on("dragend", (pointer: Phaser.Input.Pointer, dropped: boolean) => {
-            this.setAlpha(1);
-
-            this.setDepth(2);
-
-            // FIXME: Works but creates a slight bug when overlapping with other tasks.
-            this.nameText.setDepth(3);
-            this.icon.setDepth(3);
-            this.durationText.setDepth(3);
-
-            if (!this.attached) {
-                console.log('Task was not dropped in a valid zone, resetting position...')
-                this.x = this.original_coords.x;
-                this.y = this.original_coords.y;
+        this.on(
+            "drag",
+            (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                this.setPosition(dragX, dragY);
             }
-        });
+        );
+
+        this.on(
+            "dragend",
+            (pointer: Phaser.Input.Pointer, dropped: boolean) => {
+                this.setAlpha(1);
+
+                this.setDepth(2);
+
+                // FIXME: Works but creates a slight bug when overlapping with other tasks.
+                this.nameText.setDepth(3);
+                this.icon.setDepth(3);
+                this.durationText.setDepth(3);
+
+                if (!this.attached) {
+                    this.x = this.original_coords.x;
+                    this.y = this.original_coords.y;
+                }
+            }
+        );
     }
 
     public attach() {
         this.attached = true;
     }
-    
-    public detach() {     
+
+    public detach() {
         this.attached = false;
     }
 
     public update() {
         this.nameText.setPosition(this.x, this.y - this.displayHeight * 0.3);
-        this.icon.setPosition(this.x, this.y)
-        this.durationText.setPosition(this.x, this.y + this.displayHeight * 0.3);
+        this.icon.setPosition(this.x, this.y);
+        this.durationText.setPosition(
+            this.x,
+            this.y + this.displayHeight * 0.3
+        );
     }
 }
