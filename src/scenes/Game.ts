@@ -31,7 +31,11 @@ export class Game extends Scene
 
     onSubmit() {
         let total_duration = this.task_manager.getTotalDuration();
-        this.scene.start('SubmitScreen', { grade: this.scoreChart[total_duration] });
+        let grade = this.scoreChart[total_duration];
+        if (grade === undefined) {
+            grade = 1;
+        }
+        this.scene.start('SubmitScreen', { grade: grade });
     }
 
     update(time: number, delta: number): void {
