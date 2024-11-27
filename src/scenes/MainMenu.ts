@@ -31,7 +31,7 @@ export class MainMenu extends Scene
         // this.scene.start('Game')
 
         this.input.once('pointerdown', () => {
-            this.scene.start('Game');
+            this.scene.start('SubmitScreen', { grade: 2 });
         });
     }
 }
