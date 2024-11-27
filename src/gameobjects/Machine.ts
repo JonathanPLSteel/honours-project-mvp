@@ -222,5 +222,9 @@ export default class Machine extends Phaser.GameObjects.Container {
         this.highlighted_slot.destroy();
     }
 
+    public getTotal(): number {
+        return this.total;
+    }
+
     public update() {}
 }

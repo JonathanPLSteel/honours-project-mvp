@@ -115,10 +115,11 @@ export default class TaskManager {
     }
 
     private updateTotalDuration() {
-        this.total_duration = this.machines.reduce(
-            (acc, machine) => acc + machine.total,
-            0
-        );
+        // Get max duration from all machines
+
+        this.total_duration = this.machines.reduce((max, machine) => {
+            return machine.getTotal() > max ? machine.getTotal() : max;
+        }, 0);
         this.total_duration_text.setText(`${this.total_duration} minutes`);
     }
 
