@@ -124,6 +124,10 @@ export default class Task extends Phaser.GameObjects.Sprite {
         this.attached = false;
     }
 
+    public isAttached(): boolean {
+        return this.attached;
+    }
+
     public update() {
         this.nameText.setPosition(this.x, this.y - this.displayHeight * 0.3);
         this.icon.setPosition(this.x, this.y);

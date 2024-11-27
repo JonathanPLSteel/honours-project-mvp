@@ -1,3 +1,4 @@
+import Button from "./Button";
 import Machine from "./Machine";
 import Task from "./Task";
 import TaskBar from "./TaskBar";
@@ -9,12 +10,12 @@ export default class TaskManager {
     private scene: Phaser.Scene;
     private total_duration: number;
 
-    private task_types: {key: string, name: string, duration: number}[] = [
-        {key: "carrots", name: "Carrots", duration: 10},
-        {key: "roast-chicken", name: "Roast Chicken", duration: 30},
-        {key: "roast-potatoes", name: "Roast Potatoes", duration: 25},
-        {key: "green-beans", name: "Green Beans", duration: 10}
-    ]
+    private task_types: { key: string; name: string; duration: number }[] = [
+        { key: "carrots", name: "Carrots", duration: 10 },
+        { key: "roast-chicken", name: "Roast Chicken", duration: 30 },
+        { key: "roast-potatoes", name: "Roast Potatoes", duration: 25 },
+        { key: "green-beans", name: "Green Beans", duration: 10 },
+    ];
 
     private task_dims = {
         width: 175,
@@ -22,6 +23,7 @@ export default class TaskManager {
     };
 
     private total_duration_text!: Phaser.GameObjects.Text;
+    private submit_button!: Button;
 
     constructor(scene: Phaser.Scene, task_keys: string[]) {
         this.scene = scene;
@@ -48,13 +50,17 @@ export default class TaskManager {
             this.addTask(
                 new Task(
                     this.scene,
-                    this.task_types.find((task) => task.key === task_keys[i])!.name,
+                    this.task_types.find(
+                        (task) => task.key === task_keys[i]
+                    )!.name,
                     this.task_bar.getSlotCoords()[i].x,
                     this.task_bar.getSlotCoords()[i].y,
                     this.task_dims.width,
                     this.task_dims.height,
                     this.tasks.length,
-                    this.task_types.find((task) => task.key === task_keys[i])!.duration,
+                    this.task_types.find(
+                        (task) => task.key === task_keys[i]
+                    )!.duration,
                     task_keys[i]
                 )
             );
@@ -74,7 +80,16 @@ export default class TaskManager {
         );
 
         this.addMachine(
-            new Machine(this.scene, this, "Chef Julian", this.scene.scale.width * 0.75, 250, 475, 450, 1)
+            new Machine(
+                this.scene,
+                this,
+                "Chef Julian",
+                this.scene.scale.width * 0.75,
+                250,
+                475,
+                450,
+                1
+            )
         );
 
         this.total_duration = 0;
@@ -88,7 +103,7 @@ export default class TaskManager {
                 fontSize: "16px",
                 color: "#000000",
             }
-        )
+        );
     }
 
     private addTask(task: Task) {
@@ -104,8 +119,32 @@ export default class TaskManager {
     }
 
     private updateTotalDuration() {
-        this.total_duration = this.machines.reduce((acc, machine) => acc + machine.total, 0);
+        this.total_duration = this.machines.reduce(
+            (acc, machine) => acc + machine.total,
+            0
+        );
         this.total_duration_text.setText(`${this.total_duration} minutes`);
+    }
+
+    private checkSubmittable(): boolean {
+        return this.tasks.every((task) => task.isAttached());
+    }
+
+    private displaySubmitButton() {
+        this.submit_button = new Button(
+            this.scene,
+            this.total_duration_text.x + this.total_duration_text.displayWidth * 0.5,
+            this.total_duration_text.y + this.total_duration_text.displayHeight * 2.5,
+            0,
+            "Submit",
+            () => {
+                console.log("Submit button clicked");
+            }
+        );
+    }
+
+    private hideSubmitButton() {
+        this.submit_button.destroy();
     }
 
     update() {
@@ -113,5 +152,16 @@ export default class TaskManager {
 
         this.machines.forEach((machine) => machine.update());
         this.updateTotalDuration();
+
+        if (this.checkSubmittable()) {
+            // TODO: Emitting events could be worth looking into.
+            // this.scene.events.emit("submittable");
+
+            this.displaySubmitButton();
+        } else {
+            if (this.submit_button) {
+                this.hideSubmitButton();
+            }
+        }
     }
 }
