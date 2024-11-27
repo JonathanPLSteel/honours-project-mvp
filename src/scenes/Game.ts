@@ -24,7 +24,7 @@ export class Game extends Scene
 
     onSubmit() {
         let total_duration = this.task_manager.getTotalDuration();
-        console.log(`Total duration: ${total_duration}`);
+        this.scene.start('SubmitScreen', { total_duration });
     }
 
     update(time: number, delta: number): void {
