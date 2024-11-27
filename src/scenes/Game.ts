@@ -1,11 +1,14 @@
 import { Scene } from 'phaser';
-import Task from '../gameobjects/Task';
+import TaskManager from '../gameobjects/TaskManager';
 
 export class Game extends Scene
 {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     msg_text : Phaser.GameObjects.Text;
+
+    private task_manager: TaskManager;
+    private scoreChart: { [key: number]: number };
 
     constructor ()
     {
@@ -14,27 +17,24 @@ export class Game extends Scene
 
     create ()
     {
-        // this.camera = this.cameras.main;
-        // this.camera.setBackgroundColor(0x00ff00);
+        let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
 
-        // this.background = this.add.image(512, 384, 'background');
-        // this.background.setAlpha(0.5);
+        this.scoreChart = {
+            55: 1,
+            40: 3,
+        };
 
-        // this.msg_text = this.add.text(512, 384, 'Make something fun!\nand share it with us:\nsupport@phaser.io', {
-        //     fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-        //     stroke: '#000000', strokeThickness: 8,
-        //     align: 'center'
-        // });
-        // this.msg_text.setOrigin(0.5);
+        this.task_manager = new TaskManager(this, tasks);
 
-        let first_task = new Task(this, "Carrot", 200, 250, 250, 150, 0, 10);
+        this.events.on('submit', this.onSubmit, this);
+    }
 
-        let second_task = new Task(this, "Carrot", 100, 150, 250, 150, 1, 10);
+    onSubmit() {
+        let total_duration = this.task_manager.getTotalDuration();
+        this.scene.start('SubmitScreen', { grade: this.scoreChart[total_duration] });
+    }
 
-        // this.input.once('pointerdown', () => {
-
-        //     this.scene.start('GameOver');
-
-        // });
+    update(time: number, delta: number): void {
+        this.task_manager.update();
     }
 }

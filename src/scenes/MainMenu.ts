@@ -19,23 +19,19 @@ export class MainMenu extends Scene
         // this.logo = this.add.image(512, 300, 'logo');
 
         this.title = this.add.text(512, 300, 'Task Scheduling Game', {
-            fontFamily: 'Arial Black', fontSize: 52, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
+            fontFamily: "WorkSansBold, Arial, sans-serif", fontSize: 52, color: '#000000',
             align: 'center'
         }).setOrigin(0.5);
 
         this.subtitle = this.add.text(512, 460, 'Click anywhere to start', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
+            fontFamily: "WorkSansRegular, Arial, sans-serif", fontSize: 38, color: '#000000',
             align: 'center'
         }).setOrigin(0.5);
 
-        this.scene.start('Game')
+        // this.scene.start('Game')
 
-        // this.input.once('pointerdown', () => {
-
-        //     this.scene.start('Game');
-
-        // });
+        this.input.once('pointerdown', () => {
+            this.scene.start('Game');
+        });
     }
 }

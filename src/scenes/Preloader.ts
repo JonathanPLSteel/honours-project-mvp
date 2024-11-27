@@ -30,11 +30,20 @@ export class Preloader extends Scene
     preload ()
     {
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('assets');
+        this.load.setPath('assets/images');
 
         // this.load.image('logo', 'logo.png');
         this.load.image('task-bg', 'task-bg.png');
-        this.load.image('carrot', 'carrot.png');
+        this.load.image('carrots', 'carrots.png');
+        this.load.image('machine-bg', 'machine-bg.png')
+        this.load.image('chef', 'chef.png')
+        this.load.image('roast-chicken', 'roast-chicken.png')
+        this.load.image('roast-potatoes', 'roast-potatoes.png')
+        this.load.image('green-beans', 'green-beans.png')
+        this.load.image('star', 'star.png')
+
+        this.add.text(0, 0, 'Loading...', { fontFamily: 'WorkSansRegular', fontSize: '1px' }).setVisible(false);
+        this.add.text(0, 0, 'Loading...', { fontFamily: 'WorkSansBold', fontSize: '1px' }).setVisible(false);
     }
 
     create ()
