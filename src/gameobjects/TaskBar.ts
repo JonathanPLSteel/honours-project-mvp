@@ -26,20 +26,20 @@ export default class TaskBar extends Phaser.GameObjects.Container {
 
         this.slot_coords = [
             {
-                x: this.x - this.displayWidth * 0.1,
-                y: this.y - this.displayHeight * 0.05,
+                x: this.x - (this.taskManager.getTaskDims().width * 0.6),
+                y: this.y,
             },
             {
-                x: this.x - this.displayWidth * 0.3,
-                y: this.y - this.displayHeight * 0.05,
+                x: this.x - (this.taskManager.getTaskDims().width + this.taskManager.getTaskDims().width * 0.8),
+                y: this.y,
             },
             {
-                x: this.x + this.displayWidth * 0.1,
-                y: this.y - this.displayHeight * 0.05,
+                x: this.x + this.taskManager.getTaskDims().width * 0.6,
+                y: this.y,
             },
             {
-                x: this.x + this.displayWidth * 0.3,
-                y: this.y - this.displayHeight * 0.05,
+                x: this.x + this.taskManager.getTaskDims().width + this.taskManager.getTaskDims().width * 0.8,
+                y: this.y,
             }
         ];
 

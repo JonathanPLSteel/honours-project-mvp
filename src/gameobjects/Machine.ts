@@ -56,19 +56,19 @@ export default class Machine extends Phaser.GameObjects.Container {
 
         this.slot_coords = [
             {
-                x: this.x - this.displayWidth * 0.25,
+                x: this.x - (this.taskManager.getTaskDims().width * 0.6),
                 y: this.y - this.displayHeight * 0.05,
             },
             {
-                x: this.x + this.displayWidth * 0.25,
+                x: this.x + (this.taskManager.getTaskDims().width * 0.6),
                 y: this.y - this.displayHeight * 0.05,
             },
             {
-                x: this.x - this.displayWidth * 0.25,
+                x: this.x - (this.taskManager.getTaskDims().width * 0.6),
                 y: this.y + this.displayHeight * 0.25,
             },
             {
-                x: this.x + this.displayWidth * 0.25,
+                x: this.x + (this.taskManager.getTaskDims().width * 0.6),
                 y: this.y + this.displayHeight * 0.25,
             },
         ];
