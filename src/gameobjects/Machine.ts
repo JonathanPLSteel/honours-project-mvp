@@ -19,6 +19,7 @@ export default class Machine extends Phaser.GameObjects.Container {
 
     private slot_coords: { x: number; y: number }[];
     private highlighted_slot: Phaser.GameObjects.Rectangle;
+    private capacity: number;
 
     constructor(
         scene: Phaser.Scene,
@@ -71,6 +72,8 @@ export default class Machine extends Phaser.GameObjects.Container {
                 y: this.y + this.displayHeight * 0.25,
             },
         ];
+
+        this.capacity = this.slot_coords.length;
 
         // Add the sprite to the scene
         this.scene.add.existing(this);
@@ -126,9 +129,9 @@ export default class Machine extends Phaser.GameObjects.Container {
                         this.removeTask(gameObject.id);
                     }
 
-                    this.highlightSlot(this.slot_coords[this.tasks.length]);
-
-                    // this.background.setTint(0x00ff00); // Highlight the machine
+                    if (this.tasks.length < this.capacity) {
+                        this.highlightSlot(this.slot_coords[this.tasks.length]);
+                    }
                 }
             }
         );
@@ -140,7 +143,7 @@ export default class Machine extends Phaser.GameObjects.Container {
                 gameObject: Phaser.GameObjects.Sprite,
                 dropZone: Phaser.GameObjects.Zone
             ) => {
-                if (dropZone === this.dropZone) {
+                if (dropZone === this.dropZone && this.tasks.length < this.capacity) {
                     this.unhighlightSlot();
                 }
             }
@@ -153,7 +156,7 @@ export default class Machine extends Phaser.GameObjects.Container {
                 gameObject: Phaser.GameObjects.Sprite,
                 dropZone: Phaser.GameObjects.Zone
             ) => {
-                if (dropZone === this.dropZone) {
+                if (dropZone === this.dropZone && this.tasks.length < this.capacity) {
                     console.log(`${gameObject.name} dropped into the machine!`);
 
                     if (gameObject instanceof Task) {
@@ -174,6 +177,7 @@ export default class Machine extends Phaser.GameObjects.Container {
     }
 
     private addTask(task: Task) {
+        task.attach();
         this.tasks.push(task);
         this.total += task.duration;
         this.updateTotalText();
@@ -184,6 +188,7 @@ export default class Machine extends Phaser.GameObjects.Container {
         if (index !== -1) {
             this.total -= this.tasks[index].duration;
             this.updateTotalText();
+            this.tasks[index].detach();
             this.tasks.splice(index, 1);
         }
     }

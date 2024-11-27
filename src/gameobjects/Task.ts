@@ -10,6 +10,9 @@ export default class Task extends Phaser.GameObjects.Sprite {
     private icon_key: string;
     private icon!: Phaser.GameObjects.Image;
 
+    private attached: boolean;
+    private original_coords: { x: number; y: number };
+
     constructor(scene: Phaser.Scene, name: string, x: number, y: number, width: number, height: number, id: number, duration: number, icon_key: string) {   
         super(scene, x, y, 'task-bg');
 
@@ -18,6 +21,8 @@ export default class Task extends Phaser.GameObjects.Sprite {
         this.id = id;
         this.duration = duration;
         this.icon_key = icon_key;
+        this.attached = false;
+        this.original_coords = { x, y };
 
         // Add the sprite to the scene
         this.scene.add.existing(this);
@@ -92,12 +97,20 @@ export default class Task extends Phaser.GameObjects.Sprite {
             this.icon.setDepth(3);
             this.durationText.setDepth(3);
 
-            if (!dropped) {
+            if (!this.attached) {
                 console.log('Task was not dropped in a valid zone, resetting position...')
-                this.x = 512
-                this.y = 680
+                this.x = this.original_coords.x;
+                this.y = this.original_coords.y;
             }
         });
+    }
+
+    public attach() {
+        this.attached = true;
+    }
+    
+    public detach() {     
+        this.attached = false;
     }
 
     public update() {
