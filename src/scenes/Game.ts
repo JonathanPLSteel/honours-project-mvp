@@ -16,7 +16,9 @@ export class Game extends Scene
 
     create ()
     {
-        this.task_manager = new TaskManager(this);
+
+        let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
+        this.task_manager = new TaskManager(this, tasks);
     }
 
     update(time: number, delta: number): void {

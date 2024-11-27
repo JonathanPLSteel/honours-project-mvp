@@ -8,13 +8,27 @@ export default class TaskManager {
     private task_bar: TaskBar;
     private scene: Phaser.Scene;
 
+    private task_types: {key: string, name: string, duration: number}[] = [
+        {key: "carrots", name: "Carrots", duration: 10},
+        {key: "roast-chicken", name: "Roast Chicken", duration: 30},
+        {key: "roast-potatoes", name: "Roast Potatoes", duration: 25},
+        {key: "green-beans", name: "Green Beans", duration: 10}
+    ]
+
     private task_dims = {
         width: 175,
         height: 125,
     };
 
-    constructor(scene: Phaser.Scene) {
+    constructor(scene: Phaser.Scene, task_keys: string[]) {
         this.scene = scene;
+
+        // Validate task_keys
+        task_keys.forEach((key) => {
+            if (!this.task_types.find((task) => task.key === key)) {
+                throw new Error(`Invalid task key: ${key}`);
+            }
+        });
 
         this.task_bar = new TaskBar(
             this.scene,
@@ -27,77 +41,21 @@ export default class TaskManager {
             0
         );
 
-        for (let i=0; i<this.task_bar.getCapacity(); i++) {
+        for (let i = 0; i < this.task_bar.getCapacity(); i++) {
             this.addTask(
                 new Task(
                     this.scene,
-                    "Carrot",
+                    this.task_types.find((task) => task.key === task_keys[i])!.name,
                     this.task_bar.getSlotCoords()[i].x,
                     this.task_bar.getSlotCoords()[i].y,
                     this.task_dims.width,
                     this.task_dims.height,
                     this.tasks.length,
-                    10,
-                    "carrot"
+                    this.task_types.find((task) => task.key === task_keys[i])!.duration,
+                    task_keys[i]
                 )
             );
         }
-
-        // this.addTask(
-        //     new Task(
-        //         this.scene,
-        //         "Carrot",
-        //         150,
-        //         650,
-        //         this.task_dims.width,
-        //         this.task_dims.height,
-        //         this.tasks.length,
-        //         10,
-        //         "carrot"
-        //     )
-        // );
-
-        // this.addTask(
-        //     new Task(
-        //         this.scene,
-        //         "Carrot",
-        //         800,
-        //         650,
-        //         this.task_dims.width,
-        //         this.task_dims.height,
-        //         this.tasks.length,
-        //         10,
-        //         "carrot"
-        //     )
-        // );
-
-        // this.addTask(
-        //     new Task(
-        //         this.scene,
-        //         "Roast Chicken",
-        //         600,
-        //         650,
-        //         this.task_dims.width,
-        //         this.task_dims.height,
-        //         this.tasks.length,
-        //         30,
-        //         "roast-chicken"
-        //     )
-        // );
-
-        // this.addTask(
-        //     new Task(
-        //         this.scene,
-        //         "Roast Chicken",
-        //         400,
-        //         650,
-        //         this.task_dims.width,
-        //         this.task_dims.height,
-        //         this.tasks.length,
-        //         30,
-        //         "roast-chicken"
-        //     )
-        // );
 
         this.addMachine(
             new Machine(
