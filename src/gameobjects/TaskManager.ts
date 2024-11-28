@@ -36,9 +36,12 @@ export default class TaskManager {
         height: 100,
     };
 
+    private maxNumTasks = 5;
+
     private machine_dims: MachineDimsDictionary;
     private numMachines: number;
-
+    private minNumMachines = 2;
+    private maxNumMachines = 3;
 
     private total_duration_text!: Phaser.GameObjects.Text;
     private submit_button!: Button;
@@ -46,12 +49,21 @@ export default class TaskManager {
     constructor(scene: Phaser.Scene, task_keys: string[], machine_names: string[]) {
         this.scene = scene;
 
-        // Validate task_keys
+        // Validate Tasks
+        if (task_keys.length > this.maxNumTasks) {
+            throw new Error("Invalid number of tasks");
+        }
         task_keys.forEach((key) => {
             if (!this.task_types.find((task) => task.key === key)) {
                 throw new Error(`Invalid task key: ${key}`);
             }
         });
+
+        // Validate Machines
+        this.numMachines = machine_names.length;
+        if (this.numMachines < this.minNumMachines || this.numMachines > this.maxNumMachines) {
+            throw new Error("Invalid number of machines");
+        }
 
         this.machine_dims = {
             2: {
@@ -95,12 +107,6 @@ export default class TaskManager {
             },
         };
 
-        this.numMachines = machine_names.length;
-
-        if (this.numMachines < 2 || this.numMachines > 3) {
-            throw new Error("Invalid number of machines");
-        }
-
         this.task_bar = new TaskBar(
             this.scene,
             this,
@@ -112,6 +118,7 @@ export default class TaskManager {
             0
         );
 
+        // Adding all tasks onto the task bar
         for (let i = 0; i < this.task_bar.getCapacity(); i++) {
             this.addTask(
                 new Task(
@@ -132,6 +139,7 @@ export default class TaskManager {
             );
         }
 
+        // Adding all machines
         for (let i = 0; i < this.numMachines; i++) {
             this.addMachine(
                 new Machine(

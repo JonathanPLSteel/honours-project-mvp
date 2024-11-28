@@ -83,8 +83,6 @@ export default class Machine extends Phaser.GameObjects.Container {
             },
         ];
 
-        this.highlightAllSlots();
-
         // Add the sprite to the scene
         this.scene.add.existing(this);
     }
