@@ -1,5 +1,5 @@
 import Task from "./Task";
-import TaskManager from "./TaskManager";
+import TaskManager from "../managers/TaskManager";
 
 export default class Machine extends Phaser.GameObjects.Container {
     scene: Phaser.Scene;

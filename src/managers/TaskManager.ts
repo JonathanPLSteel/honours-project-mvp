@@ -1,7 +1,7 @@
-import Button from "./Button";
-import Machine from "./Machine";
-import Task from "./Task";
-import TaskBar from "./TaskBar";
+import Button from "../gameobjects/Button";
+import Machine from "../gameobjects/Machine";
+import Task from "../gameobjects/Task";
+import TaskBar from "../gameobjects/TaskBar";
 
 interface MachineDimensions {
     width: number;

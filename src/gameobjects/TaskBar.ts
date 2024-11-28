@@ -1,4 +1,4 @@
-import TaskManager from "./TaskManager";
+import TaskManager from "../managers/TaskManager";
 
 export default class TaskBar extends Phaser.GameObjects.Container {
     scene: Phaser.Scene;

@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import TaskManager from '../gameobjects/TaskManager';
+import TaskManager from '../managers/TaskManager';
 
 export class Game extends Scene
 {
