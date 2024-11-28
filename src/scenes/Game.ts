@@ -19,7 +19,7 @@ export class Game extends Scene
     {
         let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
 
-        let machine_names = ["Chef Jonathan", "Chef Julian"]
+        let machine_names = ["Chef Jonathan", "Chef Julian", "Chef Jacob"]
 
         this.scoreChart = {
             55: 1,

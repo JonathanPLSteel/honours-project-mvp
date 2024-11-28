@@ -59,21 +59,31 @@ export default class Machine extends Phaser.GameObjects.Container {
         this.slot_coords = [
             {
                 x: this.x - (this.taskManager.getTaskDims().width * 0.6),
-                y: this.y - this.displayHeight * 0.05,
+                y: this.y - this.displayHeight * 0.15,
             },
             {
                 x: this.x + (this.taskManager.getTaskDims().width * 0.6),
-                y: this.y - this.displayHeight * 0.05,
+                y: this.y - this.displayHeight * 0.15,
             },
             {
                 x: this.x - (this.taskManager.getTaskDims().width * 0.6),
-                y: this.y + this.displayHeight * 0.25,
+                y: this.y + this.displayHeight * 0.075,
             },
             {
                 x: this.x + (this.taskManager.getTaskDims().width * 0.6),
-                y: this.y + this.displayHeight * 0.25,
+                y: this.y + this.displayHeight * 0.075,
+            },
+            {
+                x: this.x - (this.taskManager.getTaskDims().width * 0.6),
+                y: this.y + this.displayHeight * 0.3,
+            },
+            {
+                x: this.x + (this.taskManager.getTaskDims().width * 0.6),
+                y: this.y + this.displayHeight * 0.3,
             },
         ];
+
+        this.highlightAllSlots();
 
         // Add the sprite to the scene
         this.scene.add.existing(this);
@@ -82,11 +92,11 @@ export default class Machine extends Phaser.GameObjects.Container {
     private addComponents() {
         this.nameText = this.scene.add.text(
             0,
-            -(this.displayHeight * 0.425),
+            -(this.displayHeight * 0.435),
             this.name,
             {
                 fontFamily: "WorkSansBold, Arial, sans-serif",
-                fontSize: "20px",
+                fontSize: "18px",
                 color: "#000000",
             }
         );
@@ -95,7 +105,7 @@ export default class Machine extends Phaser.GameObjects.Container {
 
         this.icon = this.scene.add.image(
             0,
-            -(this.displayHeight * 0.3),
+            -(this.displayHeight * 0.33),
             "chef"
         );
         this.icon.setDisplaySize(70, 70);
@@ -216,6 +226,12 @@ export default class Machine extends Phaser.GameObjects.Container {
             0.5
         );
         this.highlighted_slot.setDepth(2);
+    }
+
+    private highlightAllSlots() {
+        for (let i = 0; i < this.capacity; i++) {
+            this.highlightSlot(this.slot_coords[i]);
+        }
     }
 
     private unhighlightSlot() {

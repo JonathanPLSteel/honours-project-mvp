@@ -32,8 +32,8 @@ export default class TaskManager {
     ];
 
     private task_dims = {
-        width: 175,
-        height: 125,
+        width: 150,
+        height: 100,
     };
 
     private machine_dims: MachineDimsDictionary;
@@ -53,83 +53,53 @@ export default class TaskManager {
             }
         });
 
-        this.numMachines = machine_names.length;
-
-        if (this.numMachines < 2 || this.numMachines > 4) {
-            throw new Error("Invalid number of machines");
-        }
-
         this.machine_dims = {
             2: {
                 0: {
                     width: this.scene.scale.width * 0.45,
-                    height: this.scene.scale.height * 0.7,
+                    height: this.scene.scale.height * 0.75,
                     x: this.scene.scale.width * 0.25,
                     y: this.scene.scale.height * 0.4,
-                    capacity: 4,
+                    capacity: 6,
                 },
                 1: {
                     width: this.scene.scale.width * 0.45,
-                    height: this.scene.scale.height * 0.7,
+                    height: this.scene.scale.height * 0.75,
                     x: this.scene.scale.width * 0.75,
                     y: this.scene.scale.height * 0.4,
-                    capacity: 4,
+                    capacity: 6,
                 },
             },
             3: {
                 0: {
-                    width: 475,
-                    height: 450,
-                    x: 250,
-                    y: 250,
-                    capacity: 4,
+                    width: this.scene.scale.width * 0.3,
+                    height: this.scene.scale.height * 0.75,
+                    x: this.scene.scale.width * 0.175,
+                    y: this.scene.scale.height * 0.4,
+                    capacity: 6,
                 },
                 1: {
-                    width: 475,
-                    height: 450,
-                    x: 750,
-                    y: 250,
-                    capacity: 4,
+                    width: this.scene.scale.width * 0.3,
+                    height: this.scene.scale.height * 0.75,
+                    x: this.scene.scale.width * 0.5,
+                    y: this.scene.scale.height * 0.4,
+                    capacity: 6,
                 },
                 2: {
-                    width: 475,
-                    height: 450,
-                    x: 500,
-                    y: 750,
-                    capacity: 4,
-                },
-            },
-            4: {
-                0: {
-                    width: 475,
-                    height: 450,
-                    x: 250,
-                    y: 250,
-                    capacity: 4,
-                },
-                1: {
-                    width: 475,
-                    height: 450,
-                    x: 750,
-                    y: 250,
-                    capacity: 4,
-                },
-                2: {
-                    width: 475,
-                    height: 450,
-                    x: 250,
-                    y: 750,
-                    capacity: 4,
-                },
-                3: {
-                    width: 475,
-                    height: 450,
-                    x: 750,
-                    y: 750,
-                    capacity: 4,
+                    width: this.scene.scale.width * 0.3,
+                    height: this.scene.scale.height * 0.75,
+                    x: this.scene.scale.width * 0.825,
+                    y: this.scene.scale.height * 0.4,
+                    capacity: 6,
                 },
             },
         };
+
+        this.numMachines = machine_names.length;
+
+        if (this.numMachines < 2 || this.numMachines > 3) {
+            throw new Error("Invalid number of machines");
+        }
 
         this.task_bar = new TaskBar(
             this.scene,
@@ -181,15 +151,26 @@ export default class TaskManager {
         this.total_duration = 0;
 
         this.total_duration_text = this.scene.add.text(
-            this.scene.scale.width * 0.4625,
-            this.scene.scale.height - this.task_bar.displayHeight * 1.75,
+            this.scene.scale.width * 0.5,
+            this.scene.scale.height - this.task_bar.displayHeight * 1.2,
             `${this.total_duration} minutes`,
             {
-                fontFamily: "WorkSansRegular, Arial, sans-serif",
-                fontSize: "16px",
+                fontFamily: "WorkSansBold, Arial, sans-serif",
+                fontSize: "18px",
                 color: "#000000",
             }
-        );
+        ).setOrigin(0.5, 0.5);
+
+        this.submit_button = new Button(
+            this.scene,
+            this.total_duration_text.x,
+            this.task_bar.y,
+            0,
+            "Submit",
+            () => {
+                this.scene.events.emit("submit");
+            }
+        ).setVisible(false).disableInteractive();
     }
 
     private addTask(task: Task) {
@@ -214,22 +195,15 @@ export default class TaskManager {
     }
 
     private displaySubmitButton() {
-        this.submit_button = new Button(
-            this.scene,
-            this.total_duration_text.x +
-                this.total_duration_text.displayWidth * 0.5,
-            this.total_duration_text.y +
-                this.total_duration_text.displayHeight * 2.5,
-            0,
-            "Submit",
-            () => {
-                this.scene.events.emit("submit");
-            }
-        );
+        // console.log("Displaying submit button");
+        this.submit_button.setVisible(true).setInteractive();
+        this.task_bar.visible = false;
     }
 
     private hideSubmitButton() {
-        this.submit_button.destroy();
+        // console.log("Hiding submit button");
+        this.submit_button.setVisible(false).disableInteractive();
+        this.task_bar.visible = true;
     }
 
     getTaskDims() {
@@ -252,9 +226,7 @@ export default class TaskManager {
 
             this.displaySubmitButton();
         } else {
-            if (this.submit_button) {
-                this.hideSubmitButton();
-            }
+            this.hideSubmitButton();
         }
     }
 }
