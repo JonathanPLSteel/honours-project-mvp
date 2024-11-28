@@ -1,4 +1,4 @@
-import TaskManager from "./TaskManager";
+import TaskManager from "../managers/TaskManager";
 
 export default class TaskBar extends Phaser.GameObjects.Container {
     scene: Phaser.Scene;
@@ -26,19 +26,23 @@ export default class TaskBar extends Phaser.GameObjects.Container {
 
         this.slot_coords = [
             {
-                x: this.x - (this.taskManager.getTaskDims().width * 0.6),
+                x: this.x - (this.taskManager.getTaskDims().width * 1.2),
                 y: this.y,
             },
             {
-                x: this.x - (this.taskManager.getTaskDims().width + this.taskManager.getTaskDims().width * 0.8),
+                x: this.x - (this.taskManager.getTaskDims().width * 2.4),
                 y: this.y,
             },
             {
-                x: this.x + this.taskManager.getTaskDims().width * 0.6,
+                x: this.x,
                 y: this.y,
             },
             {
-                x: this.x + this.taskManager.getTaskDims().width + this.taskManager.getTaskDims().width * 0.8,
+                x: this.x + this.taskManager.getTaskDims().width * 1.2,
+                y: this.y,
+            },
+            {
+                x: this.x + this.taskManager.getTaskDims().width * 2.4,
                 y: this.y,
             }
         ];

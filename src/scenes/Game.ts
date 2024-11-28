@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import TaskManager from '../gameobjects/TaskManager';
+import TaskManager from '../managers/TaskManager';
 
 export class Game extends Scene
 {
@@ -17,14 +17,16 @@ export class Game extends Scene
 
     create ()
     {
-        let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
+        let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes", "carrots"]
+
+        let machine_names = ["Chef Jonathan", "Chef Julian", "Chef Jacob"];
 
         this.scoreChart = {
             55: 1,
             40: 3,
         };
 
-        this.task_manager = new TaskManager(this, tasks);
+        this.task_manager = new TaskManager(this, tasks, machine_names);
 
         this.events.on('submit', this.onSubmit, this);
     }
