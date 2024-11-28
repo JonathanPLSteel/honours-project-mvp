@@ -119,7 +119,7 @@ export default class TaskManager {
         );
 
         // Adding all tasks onto the task bar
-        for (let i = 0; i < this.task_bar.getCapacity(); i++) {
+        for (let i = 0; i < task_keys.length; i++) {
             this.addTask(
                 new Task(
                     this.scene,
