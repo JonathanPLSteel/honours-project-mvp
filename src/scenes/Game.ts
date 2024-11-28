@@ -19,12 +19,14 @@ export class Game extends Scene
     {
         let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes"]
 
+        let machine_names = ["Chef Jonathan", "Chef Julian"]
+
         this.scoreChart = {
             55: 1,
             40: 3,
         };
 
-        this.task_manager = new TaskManager(this, tasks);
+        this.task_manager = new TaskManager(this, tasks, machine_names);
 
         this.events.on('submit', this.onSubmit, this);
     }

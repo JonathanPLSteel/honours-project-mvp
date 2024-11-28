@@ -29,6 +29,7 @@ export default class Machine extends Phaser.GameObjects.Container {
         y: number,
         width: number,
         height: number,
+        capacity: number,
         id: number
     ) {
         super(scene, x, y);
@@ -36,6 +37,7 @@ export default class Machine extends Phaser.GameObjects.Container {
         this.scene = scene;
         this.taskManager = taskManager;
         this.name = name;
+        this.capacity = capacity;
         this.id = id;
         this.total = 0;
         this.tasks = [];
@@ -72,8 +74,6 @@ export default class Machine extends Phaser.GameObjects.Container {
                 y: this.y + this.displayHeight * 0.25,
             },
         ];
-
-        this.capacity = this.slot_coords.length;
 
         // Add the sprite to the scene
         this.scene.add.existing(this);

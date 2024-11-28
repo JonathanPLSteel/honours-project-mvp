@@ -3,6 +3,20 @@ import Machine from "./Machine";
 import Task from "./Task";
 import TaskBar from "./TaskBar";
 
+interface MachineDimensions {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    capacity: number;
+}
+
+type MachineDimsDictionary = {
+    [numMachines: number]: {
+        [machineNo: number]: MachineDimensions;
+    };
+};
+
 export default class TaskManager {
     private tasks: Task[] = [];
     private machines: Machine[] = [];
@@ -22,10 +36,14 @@ export default class TaskManager {
         height: 125,
     };
 
+    private machine_dims: MachineDimsDictionary;
+    private numMachines: number;
+
+
     private total_duration_text!: Phaser.GameObjects.Text;
     private submit_button!: Button;
 
-    constructor(scene: Phaser.Scene, task_keys: string[]) {
+    constructor(scene: Phaser.Scene, task_keys: string[], machine_names: string[]) {
         this.scene = scene;
 
         // Validate task_keys
@@ -34,6 +52,84 @@ export default class TaskManager {
                 throw new Error(`Invalid task key: ${key}`);
             }
         });
+
+        this.numMachines = machine_names.length;
+
+        if (this.numMachines < 2 || this.numMachines > 4) {
+            throw new Error("Invalid number of machines");
+        }
+
+        this.machine_dims = {
+            2: {
+                0: {
+                    width: this.scene.scale.width * 0.45,
+                    height: this.scene.scale.height * 0.7,
+                    x: this.scene.scale.width * 0.25,
+                    y: this.scene.scale.height * 0.4,
+                    capacity: 4,
+                },
+                1: {
+                    width: this.scene.scale.width * 0.45,
+                    height: this.scene.scale.height * 0.7,
+                    x: this.scene.scale.width * 0.75,
+                    y: this.scene.scale.height * 0.4,
+                    capacity: 4,
+                },
+            },
+            3: {
+                0: {
+                    width: 475,
+                    height: 450,
+                    x: 250,
+                    y: 250,
+                    capacity: 4,
+                },
+                1: {
+                    width: 475,
+                    height: 450,
+                    x: 750,
+                    y: 250,
+                    capacity: 4,
+                },
+                2: {
+                    width: 475,
+                    height: 450,
+                    x: 500,
+                    y: 750,
+                    capacity: 4,
+                },
+            },
+            4: {
+                0: {
+                    width: 475,
+                    height: 450,
+                    x: 250,
+                    y: 250,
+                    capacity: 4,
+                },
+                1: {
+                    width: 475,
+                    height: 450,
+                    x: 750,
+                    y: 250,
+                    capacity: 4,
+                },
+                2: {
+                    width: 475,
+                    height: 450,
+                    x: 250,
+                    y: 750,
+                    capacity: 4,
+                },
+                3: {
+                    width: 475,
+                    height: 450,
+                    x: 750,
+                    y: 750,
+                    capacity: 4,
+                },
+            },
+        };
 
         this.task_bar = new TaskBar(
             this.scene,
@@ -66,31 +162,21 @@ export default class TaskManager {
             );
         }
 
-        this.addMachine(
-            new Machine(
-                this.scene,
-                this,
-                "Chef Jonathan",
-                this.scene.scale.width * 0.25,
-                250,
-                475,
-                450,
-                0
-            )
-        );
-
-        this.addMachine(
-            new Machine(
-                this.scene,
-                this,
-                "Chef Julian",
-                this.scene.scale.width * 0.75,
-                250,
-                475,
-                450,
-                1
-            )
-        );
+        for (let i = 0; i < this.numMachines; i++) {
+            this.addMachine(
+                new Machine(
+                    this.scene,
+                    this,
+                    machine_names[i],
+                    this.machine_dims[this.numMachines][i].x,
+                    this.machine_dims[this.numMachines][i].y,
+                    this.machine_dims[this.numMachines][i].width,
+                    this.machine_dims[this.numMachines][i].height,
+                    this.machine_dims[this.numMachines][i].capacity,
+                    i
+                )
+            );
+        }
 
         this.total_duration = 0;
 
