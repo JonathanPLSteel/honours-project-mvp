@@ -28,7 +28,7 @@ export class MainMenu extends Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        this.scene.start('Game')
+        this.scene.start('LevelSelect')
 
         // this.input.once('pointerdown', () => {
         //     this.scene.start('Game');

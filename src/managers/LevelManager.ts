@@ -4,15 +4,13 @@ export interface Level {
     task_keys: string[];
     machine_names: string[];
     scoreChart: { [key: number]: number };
+    grade: number;
 }
 
 export default class LevelManager {
     private levels: Level[];
-    private currentLevel: number;
-    private scene: Phaser.Scene;
 
-    constructor(scene: Phaser.Scene) {
-        this.scene = scene;
+    constructor() {
         this.levels = [
             {
                 id: 1,
@@ -24,6 +22,7 @@ export default class LevelManager {
                     2: 200,
                     3: 300,
                 },
+                grade: 0,
             },
             {
                 id: 2,
@@ -35,20 +34,30 @@ export default class LevelManager {
                     2: 200,
                     3: 300,
                 },
+                grade: 0,
             },
         ];
-        this.currentLevel = 1;
     }
 
-    public getCurrentLevel(): Level {
-        return this.levels[this.currentLevel - 1];
+    public getAllLevels(): Level[] {
+        return this.levels;
     }
 
-    public nextLevel(): void {
-        this.currentLevel++;
+    public loadLevel(level: number): Level {
+        if (level < 1 || level > this.levels.length) {
+            throw new Error("Invalid level");
+        }
+        return this.levels[level - 1];
     }
 
-    public isLastLevel(): boolean {
-        return this.currentLevel === this.levels.length;
+    public setGrade(level: number, grade: number): void {
+        if (level < 1 || level > this.levels.length) {
+            throw new Error("Invalid level");
+        }
+        if (grade < 1 || grade > 3) {
+            throw new Error("Invalid grade");
+        }
+        this.levels[level - 1].grade = grade;
     }
 }
+    

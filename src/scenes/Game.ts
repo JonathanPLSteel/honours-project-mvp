@@ -13,12 +13,12 @@ export class Game extends Scene
         super('Game');
     }
 
-    create ()
+    create (data: {level_id: number})
     {
         
-        this.level_manager = new LevelManager(this);
+        this.level_manager = new LevelManager();
 
-        this.current_level = this.level_manager.getCurrentLevel();
+        this.current_level = this.level_manager.loadLevel(data.level_id);
 
         this.task_manager = new TaskManager(this, this.current_level.task_keys, this.current_level.machine_names);
 
