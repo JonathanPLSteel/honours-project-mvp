@@ -25,10 +25,10 @@ export default class TaskManager {
     private total_duration: number;
 
     private task_types: { key: string; name: string; duration: number }[] = [
-        { key: "carrots", name: "Carrots", duration: 10 },
-        { key: "roast-chicken", name: "Roast Chicken", duration: 30 },
-        { key: "roast-potatoes", name: "Roast Potatoes", duration: 25 },
-        { key: "green-beans", name: "Green Beans", duration: 10 },
+        { key: "carrots", name: "Carrots", duration: 25 },
+        { key: "roast-chicken", name: "Roast Chicken", duration: 40 },
+        { key: "roast-potatoes", name: "Roast Potatoes", duration: 30 },
+        { key: "green-beans", name: "Green Beans", duration: 25 },
     ];
 
     private task_dims = {

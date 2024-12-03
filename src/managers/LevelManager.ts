@@ -4,7 +4,6 @@ export interface Level {
     task_keys: string[];
     machine_names: string[];
     scoreChart: { [key: number]: number };
-    grade: number;
 }
 
 export default class LevelManager {
@@ -18,23 +17,43 @@ export default class LevelManager {
                 task_keys: ["carrots", "roast-chicken", "roast-potatoes"],
                 machine_names: ["Chef Jonathan", "Chef Julian"],
                 scoreChart: {
-                    1: 100,
-                    2: 200,
-                    3: 300,
-                },
-                grade: 0,
+                    70: 1,
+                    65: 2,
+                    55: 3,
+                }
             },
             {
                 id: 2,
                 name: "Level 2",
                 task_keys: ["carrots", "roast-chicken", "roast-potatoes", "green-beans"],
+                machine_names: ["Chef Jonathan", "Chef Julian"],
+                scoreChart: {
+                    80: 1,
+                    70: 2,
+                    65: 3,
+                }
+            },
+            {
+                id: 3,
+                name: "Level 3",
+                task_keys: ["carrots", "roast-chicken", "roast-potatoes", "green-beans", "green-beans"],
+                machine_names: ["Chef Jonathan", "Chef Julian"],
+                scoreChart: {
+                    90: 1,
+                    80: 2,
+                    75: 3,
+                }
+            },
+            {
+                id: 4,
+                name: "Level 4",
+                task_keys: ["carrots", "roast-chicken", "roast-potatoes", "green-beans", "green-beans"],
                 machine_names: ["Chef Jonathan", "Chef Julian", "Chef Jacob"],
                 scoreChart: {
-                    1: 100,
-                    2: 200,
-                    3: 300,
-                },
-                grade: 0,
+                    75: 1,
+                    65: 2,
+                    55: 3,
+                }
             },
         ];
     }
@@ -48,16 +67,6 @@ export default class LevelManager {
             throw new Error("Invalid level");
         }
         return this.levels[level - 1];
-    }
-
-    public setGrade(level: number, grade: number): void {
-        if (level < 1 || level > this.levels.length) {
-            throw new Error("Invalid level");
-        }
-        if (grade < 1 || grade > 3) {
-            throw new Error("Invalid grade");
-        }
-        this.levels[level - 1].grade = grade;
     }
 }
     

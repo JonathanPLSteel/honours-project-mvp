@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { LocalStorageManager } from "../managers/LocalStorageManager";
 
 export class SubmitScreen extends Scene {
     grading_text: Phaser.GameObjects.Text;
@@ -13,6 +14,8 @@ export class SubmitScreen extends Scene {
     create(data: { level_id: number, grade: number }) {
         this.level_id = data.level_id;
         this.grade = data.grade;
+
+        this.save_grade();
 
         let first_star = this.add
             .image(
@@ -35,10 +38,10 @@ export class SubmitScreen extends Scene {
             .setDisplaySize(200, 200)
             .setOrigin(0.5);
 
-        if (data.grade === 1) {
+        if (this.grade === 1) {
             second_star.setTint(0x777777);
             third_star.setTint(0x777777);
-        } else if (data.grade === 2) {
+        } else if (this.grade === 2) {
             third_star.setTint(0x777777);
         }
 
@@ -68,5 +71,10 @@ export class SubmitScreen extends Scene {
         } else {
             return "Perfect";
         }
+    }
+
+    private save_grade() {
+        // Save the grade to the server
+        LocalStorageManager.saveData(this.level_id.toString(), this.grade);
     }
 }
