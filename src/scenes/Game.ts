@@ -1,43 +1,39 @@
 import { Scene } from 'phaser';
 import TaskManager from '../managers/TaskManager';
+import LevelManager, { Level } from '../managers/LevelManager';
 
 export class Game extends Scene
 {
-    camera: Phaser.Cameras.Scene2D.Camera;
-    background: Phaser.GameObjects.Image;
-    msg_text : Phaser.GameObjects.Text;
-
     private task_manager: TaskManager;
-    private scoreChart: { [key: number]: number };
+    private level_manager: LevelManager;
+    private current_level: Level;
+    private current_level_id: number;
 
     constructor ()
     {
         super('Game');
     }
 
-    create ()
+    create (data: {level_id: number})
     {
-        let tasks = ["carrots", "green-beans", "roast-chicken", "roast-potatoes", "carrots"]
+        this.current_level_id = data.level_id;
 
-        let machine_names = ["Chef Jonathan", "Chef Julian", "Chef Jacob"];
+        this.level_manager = new LevelManager();
 
-        this.scoreChart = {
-            55: 1,
-            40: 3,
-        };
+        this.current_level = this.level_manager.loadLevel(this.current_level_id);
 
-        this.task_manager = new TaskManager(this, tasks, machine_names);
+        this.task_manager = new TaskManager(this, this.current_level.task_keys, this.current_level.machine_names);
 
         this.events.on('submit', this.onSubmit, this);
     }
 
     onSubmit() {
         let total_duration = this.task_manager.getTotalDuration();
-        let grade = this.scoreChart[total_duration];
+        let grade = this.current_level.scoreChart[total_duration];
         if (grade === undefined) {
             grade = 1;
         }
-        this.scene.start('SubmitScreen', { grade: grade });
+        this.scene.start('SubmitScreen', { level_id: this.current_level_id, grade: grade });
     }
 
     update(time: number, delta: number): void {
