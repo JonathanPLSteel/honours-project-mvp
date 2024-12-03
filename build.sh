@@ -26,9 +26,9 @@ echo -e "👷‍♂️ \e[1;32mModifying HTML file to fix paths...\e[0m"
 sed -i '' -E 's/href="\/([^"]*)"/href="\1"/g' "$HTML_FILE"
 
 # Step 4: Commit changes to the `main` branch
-echo -e "👷‍♂️ \e[1;32mCommitting changes to the $MAIN_BRANCH branch...\e[0m"
-git add *
-git commit -m "$COMMIT_MESSAGE"
+echo -e "👷‍♂️ \e[1;32mCommitting changes to the main branch...\e[0m"
+git add -f $DIST_FOLDER  # Force-add the dist folder even if .gitignore excludes it
+git commit -m "$COMMIT_MESSAGE" || echo -e "⚠️ \e[1;33mNo changes to commit.\e[0m"
 git push origin $MAIN_BRANCH
 
 # Step 5: Switch to the `gh-pages` branch
