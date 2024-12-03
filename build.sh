@@ -27,8 +27,7 @@ sed -i '' -E 's/href="\/([^"]*)"/href="\1"/g' "$HTML_FILE"
 
 # Step 4: Commit changes to the `main` branch
 echo -e "👷‍♂️ \e[1;32mCommitting changes to the $MAIN_BRANCH branch...\e[0m"
-git add $DIST_FOLDER
-git add $PUBLIC_FOLDER
+git add *
 git commit -m "$COMMIT_MESSAGE"
 git push origin $MAIN_BRANCH
 
