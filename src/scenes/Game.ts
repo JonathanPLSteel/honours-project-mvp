@@ -7,6 +7,7 @@ export class Game extends Scene
     private task_manager: TaskManager;
     private level_manager: LevelManager;
     private current_level: Level;
+    private current_level_id: number;
 
     constructor ()
     {
@@ -15,10 +16,11 @@ export class Game extends Scene
 
     create (data: {level_id: number})
     {
-        
+        this.current_level_id = data.level_id;
+
         this.level_manager = new LevelManager();
 
-        this.current_level = this.level_manager.loadLevel(data.level_id);
+        this.current_level = this.level_manager.loadLevel(this.current_level_id);
 
         this.task_manager = new TaskManager(this, this.current_level.task_keys, this.current_level.machine_names);
 
@@ -31,7 +33,7 @@ export class Game extends Scene
         if (grade === undefined) {
             grade = 1;
         }
-        this.scene.start('SubmitScreen', { grade: grade });
+        this.scene.start('SubmitScreen', { level_id: this.current_level_id, grade: grade });
     }
 
     update(time: number, delta: number): void {

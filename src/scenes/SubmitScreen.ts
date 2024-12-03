@@ -3,11 +3,17 @@ import { Scene } from "phaser";
 export class SubmitScreen extends Scene {
     grading_text: Phaser.GameObjects.Text;
 
+    private grade: number;
+    private level_id: number;
+
     constructor() {
         super("SubmitScreen");
     }
 
-    create(data: { grade: number }) {
+    create(data: { level_id: number, grade: number }) {
+        this.level_id = data.level_id;
+        this.grade = data.grade;
+
         let first_star = this.add
             .image(
                 this.scale.width / 2 - 125,
@@ -50,7 +56,7 @@ export class SubmitScreen extends Scene {
         this.grading_text.setOrigin(0.5);
 
         this.input.once("pointerdown", () => {
-            this.scene.start("MainMenu");
+            this.scene.start("LevelSelect", { level_id: this.level_id, grade: this.grade });
         });
     }
 
